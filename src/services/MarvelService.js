@@ -22,7 +22,7 @@ class MarvelService {
     }
 
     _transformCharacter = ({name, description, thumbnail: {path, extension}, urls: [{url}, {url : wiki}]}) => {
-        description = description.length > 225 ? description.slice(0, 224) + '...' : description;
+        description = description.length > 225 ? description.slice(0, 180) + '...' : description;
         description = !description.length ? 'Looks like Kratos stole the description' : description
 
         return {
