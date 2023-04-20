@@ -1,45 +1,60 @@
 import './charList.scss';
-import {Component} from "react";
-import MarvelService from "../../services/MarvelService";
-import Spinner from "../spinner/Spinner";
-import ErrorMessage from "../errorMessage/ErrorMessage";
+import { Component } from 'react';
+import MarvelService from '../../services/MarvelService';
+import Spinner from '../spinner/Spinner';
+import ErrorMessage from '../errorMessage/ErrorMessage';
 
 class CharList extends Component {
-
     state = {
         chars: {},
         loading: true,
-        error: false
-    }
+        error: false,
+    };
 
     marvelService = new MarvelService();
 
     componentDidMount() {
-        this.getCharacters()
+        this.getCharacters();
     }
 
     getCharacters = () => {
         this.marvelService
             .getAllCharacters()
-            .then(item => this.setState({
-                chars: item,
-                loading: false
-            }))
-            .catch(() => this.setState({
-                loading: false,
-                error: true
-            }))
-    }
+            .then((item) =>
+                this.setState({
+                    chars: item,
+                    loading: false,
+                }),
+            )
+            .catch(() =>
+                this.setState({
+                    loading: false,
+                    error: true,
+                }),
+            );
+    };
 
     render() {
-        const {chars, loading, error} = this.state
-        const spinner = loading ? <Spinner/> : null
-        const errorMessage = error ? <ErrorMessage/> : null
-        const styleBlock = (spinner || errorMessage) ? {display: 'block'} : null;
+        const { chars, loading, error } = this.state;
+        const spinner = loading ? <Spinner /> : null;
+        const errorMessage = error ? <ErrorMessage /> : null;
+        const styleBlock =
+            spinner || errorMessage ? { display: 'block' } : null;
 
-        const view = (spinner || errorMessage) ? null : chars.map(({name, thumbnail}) => {
-            return <View name={name} thumbnail={thumbnail}/>
-        })
+        const view =
+            spinner || errorMessage
+                ? null
+                : chars.map(({ name, thumbnail, id }) => {
+                      return (
+                          <View
+                              name={name}
+                              thumbnail={thumbnail}
+                              key={id}
+                              id={id}
+                              onCharSelected={this.props.onCharSelected}
+                          />
+                      );
+                  });
 
         return (
             <div className="char__list">
@@ -52,20 +67,21 @@ class CharList extends Component {
                     <div className="inner">load more</div>
                 </button>
             </div>
-        )
+        );
     }
 }
 
-const View = ({name, thumbnail}) => {
-    const styleObjectFit = /not_available.jpg$/.test(thumbnail) ? {objectFit: 'contain'} :
-        null
+const View = ({ name, thumbnail, id, onCharSelected }) => {
+    const styleObjectFit = /not_available.jpg$/.test(thumbnail)
+        ? { objectFit: 'contain' }
+        : null;
 
     return (
-        <li className="char__item">
-            <img src={thumbnail} alt="abyss" style={styleObjectFit}/>
+        <li className="char__item" onClick={() => onCharSelected(id)}>
+            <img src={thumbnail} alt="abyss" style={styleObjectFit} />
             <div className="char__name">{name}</div>
         </li>
-    )
-}
+    );
+};
 
 export default CharList;
