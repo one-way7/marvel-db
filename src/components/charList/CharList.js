@@ -34,6 +34,20 @@ class CharList extends Component {
             );
     };
 
+    renderItems = (chars) => {
+        return chars.map(({ name, thumbnail, id }) => {
+            return (
+                <View
+                    name={name}
+                    thumbnail={thumbnail}
+                    key={id}
+                    id={id}
+                    onCharSelected={this.props.onCharSelected}
+                />
+            );
+        });
+    };
+
     render() {
         const { chars, loading, error } = this.state;
         const spinner = loading ? <Spinner /> : null;
@@ -41,20 +55,7 @@ class CharList extends Component {
         const styleBlock =
             spinner || errorMessage ? { display: 'block' } : null;
 
-        const view =
-            spinner || errorMessage
-                ? null
-                : chars.map(({ name, thumbnail, id }) => {
-                      return (
-                          <View
-                              name={name}
-                              thumbnail={thumbnail}
-                              key={id}
-                              id={id}
-                              onCharSelected={this.props.onCharSelected}
-                          />
-                      );
-                  });
+        const view = spinner || errorMessage ? null : this.renderItems(chars);
 
         return (
             <div className="char__list">
