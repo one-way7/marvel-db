@@ -79,13 +79,20 @@
         transition: none;
 
     }
+
     &.button__main::before, &.button__main::after {
         background-color: $main-color;
     }
+
     &.button__secondary::before, &.button__secondary::after {
         background-color: $grey;
     }
+
     &:hover {
         transform: translateY(-5px);
+    }
+
+    &:disabled {
+        filter: grayscale(.5);
     }
 }
