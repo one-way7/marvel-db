@@ -1,8 +1,11 @@
-import './charList.scss';
 import { Component } from 'react';
+import propTypes from 'prop-types';
+
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
+
+import './charList.scss';
 
 class CharList extends Component {
     state = {
@@ -114,4 +117,7 @@ const View = ({ name, thumbnail, id, onCharSelected }) => {
     );
 };
 
+CharList.propTypes = {
+    onCharSelected: propTypes.func.isRequired,
+};
 export default CharList;
