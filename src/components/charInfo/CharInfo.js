@@ -1,9 +1,11 @@
-import './charInfo.scss';
 import { Component } from 'react';
+
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import Skeleton from '../skeleton/Skeleton';
 import ErrorMessage from '../errorMessage/ErrorMessage';
+
+import './charInfo.scss';
 
 class CharInfo extends Component {
     state = {
@@ -80,7 +82,7 @@ const View = ({ char }) => {
         : null;
 
     const listOfComics = comics.map(({ name }, i) => {
-        if (i > 9) return;
+        // if (i > 9) return;
         return <Comics name={name} key={i} />;
     });
 
