@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import propTypes from 'prop-types';
 
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 
@@ -9,33 +9,21 @@ import './charList.scss';
 
 const CharList = (props) => {
     const [charList, setCharList] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
     const [offset, setOffset] = useState(210);
     const [newItemLoading, setNewItemLoading] = useState(false);
     const [charEnded, setCharEnded] = useState(false);
 
-    const marvelService = new MarvelService();
+    const { loading, error, getAllCharacters } = useMarvelService();
 
     useEffect(() => {
         getCharacters();
     }, []);
 
     const getCharacters = (offset) => {
-        onCharListLoading();
+        const firstLoading = charList.length === 0 ? false : true;
+        setNewItemLoading(firstLoading);
 
-        marvelService
-            .getAllCharacters(offset)
-            .then(onCharListLoaded)
-            .catch(() => {
-                setLoading(false);
-                setError(true);
-                setNewItemLoading(false);
-            });
-    };
-
-    const onCharListLoading = () => {
-        setNewItemLoading(true);
+        getAllCharacters(offset).then(onCharListLoaded);
     };
 
     const onCharListLoaded = (newCharList) => {
@@ -45,7 +33,6 @@ const CharList = (props) => {
         }
 
         setCharList((charList) => [...charList, ...newCharList]);
-        setLoading(false);
         setOffset((offset) => offset + newCharList.length);
         setNewItemLoading(false);
         setCharEnded(ended);
@@ -91,7 +78,7 @@ const CharList = (props) => {
         });
     };
 
-    const spinner = loading ? <Spinner /> : null;
+    const spinner = loading && !newItemLoading ? <Spinner /> : null;
     const errorMessage = error ? <ErrorMessage /> : null;
     const styleBlock = spinner || errorMessage ? { display: 'block' } : null;
 
