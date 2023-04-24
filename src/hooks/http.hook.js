@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 
 const useHttp = () => {
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(null);
 
     const request = useCallback(
         async (
@@ -12,7 +12,6 @@ const useHttp = () => {
             headers = { 'Content-Type': 'application/json' },
         ) => {
             setLoading(true);
-
             try {
                 const res = await fetch(url, {
                     method,
