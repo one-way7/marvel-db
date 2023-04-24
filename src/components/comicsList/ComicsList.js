@@ -2,16 +2,15 @@ import { useState, useEffect } from 'react';
 import useMarvelService from '../../services/MarvelService';
 
 import Spinner from '../spinner/Spinner';
-import Skeleton from '../skeleton/Skeleton';
+import ErrorMessage from '../errorMessage/ErrorMessage';
+import { Link } from 'react-router-dom';
 
 import './comicsList.scss';
-import uw from '../../resources/img/UW.png';
-import ErrorMessage from '../errorMessage/ErrorMessage';
 
 const ComicsList = () => {
     const [listComics, setComics] = useState([]);
     const [newItemLoading, setNewItemLoading] = useState(false);
-    const [offset, setOffset] = useState(210);
+    const [offset, setOffset] = useState(214);
     const [ended, setEnded] = useState('block');
     const { loading, error, getAllComics } = useMarvelService();
 
@@ -38,11 +37,10 @@ const ComicsList = () => {
             const styleObjectFit = /not_available.jpg$/.test(thumbnail)
                 ? { objectFit: 'contain' }
                 : null;
-            const resultPrice = price !== 0 ? `${price}$` : 'NOT AVAILABLE';
 
             return (
                 <li key={id} className="comics__item">
-                    <a href={url} target="_blank">
+                    <Link to={`${id}`}>
                         <img
                             src={thumbnail}
                             alt={title}
@@ -50,8 +48,8 @@ const ComicsList = () => {
                             style={styleObjectFit}
                         />
                         <div className="comics__item-name">{title}</div>
-                        <div className="comics__item-price">{resultPrice}</div>
-                    </a>
+                        <div className="comics__item-price">{price}</div>
+                    </Link>
                 </li>
             );
         });
