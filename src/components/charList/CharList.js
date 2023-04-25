@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import propTypes from 'prop-types';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
@@ -49,33 +50,41 @@ const CharList = (props) => {
     };
 
     const renderItems = (chars) => {
-        return chars.map(({ name, thumbnail, id }, i) => {
+        const items = chars.map(({ name, thumbnail, id }, i) => {
             const styleObjectFit = /not_available.jpg$/.test(thumbnail)
                 ? { objectFit: 'contain' }
                 : null;
 
             return (
-                <li
-                    ref={(el) => (itemsRef.current[i] = el)}
-                    key={id}
-                    className="char__item"
-                    onClick={() => {
-                        props.onCharSelected(id);
-                        focusOnItem(i);
-                    }}
-                    onKeyPress={(e) => {
-                        if (e.key === ' ' || e.key === 'Enter') {
+                <CSSTransition key={i} timeout={500} classNames="char__item">
+                    <li
+                        ref={(el) => (itemsRef.current[i] = el)}
+                        key={i}
+                        className="char__item"
+                        onClick={() => {
                             props.onCharSelected(id);
                             focusOnItem(i);
-                        }
-                    }}
-                    tabIndex={0}
-                >
-                    <img src={thumbnail} alt="abyss" style={styleObjectFit} />
-                    <div className="char__name">{name}</div>
-                </li>
+                        }}
+                        onKeyPress={(e) => {
+                            if (e.key === ' ' || e.key === 'Enter') {
+                                props.onCharSelected(id);
+                                focusOnItem(i);
+                            }
+                        }}
+                        tabIndex={0}
+                    >
+                        <img
+                            src={thumbnail}
+                            alt="abyss"
+                            style={styleObjectFit}
+                        />
+                        <div className="char__name">{name}</div>
+                    </li>
+                </CSSTransition>
             );
         });
+
+        return <TransitionGroup component={null}>{items}</TransitionGroup>;
     };
 
     const spinner = loading && !newItemLoading ? <Spinner /> : null;
@@ -83,6 +92,7 @@ const CharList = (props) => {
     const styleBlock = spinner || errorMessage ? { display: 'block' } : null;
 
     const view = spinner || errorMessage ? null : renderItems(charList);
+
 
     return (
         <div className="char__list">
