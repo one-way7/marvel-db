@@ -21,11 +21,10 @@ const CharList = (props) => {
     }, []);
 
     const getCharacters = (offset) => {
-        const firstLoading = charList.length === 0 ? false : true;
+        const firstLoading = charList.length !== 0;
         setNewItemLoading(firstLoading);
 
-        getAllCharacters(offset)
-            .then(onCharListLoaded);
+        getAllCharacters(offset).then(onCharListLoaded);
     };
 
     const onCharListLoaded = (newCharList) => {
