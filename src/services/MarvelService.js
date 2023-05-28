@@ -5,7 +5,7 @@ const useMarvelService = () => {
     const _apiKey = 'apikey=2ba92860ed936b4d5298bdbf8331025a';
     const _baseOffset = 198;
 
-    const { loading, error, request, clearError } = useHttp();
+    const { loading, setLoading, error, request, clearError } = useHttp();
 
     const getAllCharacters = async (offset = _baseOffset) => {
         const res = await request(
@@ -23,7 +23,13 @@ const useMarvelService = () => {
 
     const getCharacter = async (id) => {
         const res = await request(`${_apiBase}characters/${id}?${_apiKey}`);
+        return _transformCharacter(res.data.results[0]);
+    };
 
+    const getCharacterByName = async (name) => {
+        const res = await request(
+            `${_apiBase}characters?name=${name}&${_apiKey}`,
+        );
         return _transformCharacter(res.data.results[0]);
     };
 
@@ -32,29 +38,27 @@ const useMarvelService = () => {
         return _transformComics(res.data.results[0]);
     };
 
-    const _transformCharacter = ({
-        id,
-        name,
-        description,
-        thumbnail: { path, extension },
-        urls: [{ url }, { url: wiki }],
-        comics: { items: comics },
-    }) => {
-        description =
-            description.length > 225
-                ? description.slice(0, 180) + '...'
-                : description;
+    const _transformCharacter = (person) => {
+        if (person) {
+            person.description =
+                person.description.length > 225
+                    ? person.description.slice(0, 180) + '...'
+                    : person.description;
 
-        return {
-            name,
-            description:
-                description || 'Looks like Kratos stole the description',
-            thumbnail: `${path}.${extension}`,
-            homepage: url,
-            wiki,
-            id,
-            comics,
-        };
+            return {
+                name: person.name,
+                description:
+                    person.description ||
+                    'Looks like Kratos stole the description',
+                thumbnail: `${person.thumbnail.path}.${person.thumbnail.extension}`,
+                homepage: person.homepage,
+                wiki: person.wiki,
+                id: person.id,
+                comics: person.comics.items,
+            };
+        } else {
+            return undefined;
+        }
     };
 
     const _transformComics = ({
@@ -82,9 +86,11 @@ const useMarvelService = () => {
 
     return {
         loading,
+        setLoading,
         error,
         clearError,
         getCharacter,
+        getCharacterByName,
         getAllCharacters,
         getAllComics,
         getComics,
