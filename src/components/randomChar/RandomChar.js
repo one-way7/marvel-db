@@ -17,7 +17,9 @@ const RandomChar = () => {
     }, []);
 
     const updateChar = () => {
-        const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
+        const maxId = 1011400;
+        const minId = 1011000;
+        const id = Math.floor(Math.random() * (maxId - minId) + minId);
 
         clearError();
         getCharacter(id).then((res) => onCharLoaded(res));
