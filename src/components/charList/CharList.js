@@ -28,15 +28,10 @@ const CharList = (props) => {
     };
 
     const onCharListLoaded = (newCharList) => {
-        let ended = false;
-        if (newCharList.length < 9) {
-            ended = true;
-        }
-
         setCharList((charList) => [...charList, ...newCharList]);
         setOffset((offset) => offset + newCharList.length);
         setNewItemLoading(false);
-        setCharEnded(ended);
+        setCharEnded(newCharList.at(-1).isLastCharacter);
     };
 
     const itemsRef = useRef([]);
