@@ -9,10 +9,10 @@ import CharSearch from '../charSearch/CharSearch';
 import decoration from '../../resources/img/vision.png';
 
 const MainPage = () => {
-    const [selectedChar, setChar] = useState(null);
+    const [selectedChar, setSelectedChar] = useState(null);
 
     const onCharSelected = (id) => {
-        setChar(id);
+        setSelectedChar(id);
     };
 
     return (
