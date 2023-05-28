@@ -8,10 +8,17 @@ const useMarvelService = () => {
     const { loading, setLoading, error, request, clearError } = useHttp();
 
     const getAllCharacters = async (offset = _baseOffset) => {
+        const pageCount = 9;
         const res = await request(
-            `${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`,
+            `${_apiBase}characters?limit=${pageCount}&offset=${offset}&${_apiKey}`,
         );
-        return res.data.results.map(_transformCharacter);
+        const characters = res.data.results.map(_transformCharacter);
+
+        if (characters.length < pageCount) {
+            characters.at(-1).isLastCharacter = true;
+        }
+
+        return characters;
     };
 
     const getAllComics = async (offset = _baseOffset) => {
