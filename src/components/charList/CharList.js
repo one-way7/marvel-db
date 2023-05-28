@@ -24,7 +24,8 @@ const CharList = (props) => {
         const firstLoading = charList.length === 0 ? false : true;
         setNewItemLoading(firstLoading);
 
-        getAllCharacters(offset).then(onCharListLoaded);
+        getAllCharacters(offset)
+            .then(onCharListLoaded);
     };
 
     const onCharListLoaded = (newCharList) => {
@@ -49,8 +50,8 @@ const CharList = (props) => {
         itemsRef.current[id].focus();
     };
 
-    const renderItems = (chars) => {
-        const items = chars.map(({ name, thumbnail, id }, i) => {
+    const renderItems = (charList) => {
+        const items = charList.map(({ name, thumbnail, id }, i) => {
             const styleObjectFit = /not_available.jpg$/.test(thumbnail)
                 ? { objectFit: 'contain' }
                 : null;
@@ -92,7 +93,6 @@ const CharList = (props) => {
     const styleBlock = spinner || errorMessage ? { display: 'block' } : null;
 
     const view = spinner || errorMessage ? null : renderItems(charList);
-
 
     return (
         <div className="char__list">
