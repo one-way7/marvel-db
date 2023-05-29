@@ -14,6 +14,7 @@ Marvel Database is a SPA that interacts with the Marvel API to fetch and display
 ### Technologies used
 
 -   React (Class-components, Func-components + Hooks, Custom hooks, React.Lazy, ErrorBoundary);
+-   react-router v6
 -   formik
 -   yup
 -   react-transition-group
