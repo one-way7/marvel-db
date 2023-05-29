@@ -21,7 +21,7 @@ Marvel Database is a SPA that interacts with the Marvel API to fetch and display
 -   CSS3/Scss
 -   [Marvel API](https://developer.marvel.com/)
 
-### ✨ [Demo](#)
+### ✨ [Demo](https://marvel-db7.netlify.app/)
 
 ## ![marvel-db-animation](https://github.com/one-way7/marvel-db/assets/121254183/fbe6005b-6b38-46e1-93e7-3579c8cdadf8)
 
